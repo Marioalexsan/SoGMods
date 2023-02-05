@@ -1,0 +1,45 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<RootNamespace>Marioalexsan.GrindeaQoL</RootNamespace>
+		<AssemblyName>GrindeaQoL</AssemblyName>
+		<TargetFramework>net472</TargetFramework>
+
+		<LangVersion>7.3</LangVersion>
+
+		<PlatformTarget>x86</PlatformTarget>
+		<Platforms>x86</Platforms>
+		<OutputType>Library</OutputType>
+	</PropertyGroup>
+
+	<!-- Nuget -->
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Console" Version="7.0.0" />
+	</ItemGroup>
+	
+	<ItemGroup>
+        <Reference Include="Grindless, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
+          <SpecificVersion>False</SpecificVersion>
+          <HintPath>..\Grindless\Grindless\bin\x86\Debug\net472\merged\Grindless.exe</HintPath>
+        </Reference>
+        <Reference Include="Microsoft.Xna.Framework">
+          <HintPath>..\Grindless\Dependencies\Microsoft.Xna.Framework.dll</HintPath>
+        </Reference>
+        <Reference Include="Microsoft.Xna.Framework.Game">
+          <HintPath>..\Grindless\Dependencies\Microsoft.Xna.Framework.Game.dll</HintPath>
+        </Reference>
+        <Reference Include="Microsoft.Xna.Framework.Graphics">
+          <HintPath>..\Grindless\Dependencies\Microsoft.Xna.Framework.Graphics.dll</HintPath>
+        </Reference>
+        <Reference Include="Microsoft.Xna.Framework.Xact">
+          <HintPath>..\Grindless\Dependencies\Microsoft.Xna.Framework.Xact.dll</HintPath>
+        </Reference>
+        <Reference Include="Secrets Of Grindea">
+          <HintPath>..\Grindless\Dependencies\Secrets Of Grindea.exe</HintPath>
+        </Reference>
+	</ItemGroup>
+
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+		<Exec Command="python ./Scripts/install.py" />
+	</Target>
+</Project>
