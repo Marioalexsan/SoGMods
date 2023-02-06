@@ -9,7 +9,7 @@ using static SoG.Inventory;
 using Microsoft.Xna.Framework;
 using Grindless;
 
-namespace Marioalexsan.GrindeaQoL.Patches
+namespace Marioalexsan.GrindeaQoL
 {
     [HarmonyPatch]
     internal static class BetterSpecialEffectNames
@@ -141,7 +141,7 @@ namespace Marioalexsan.GrindeaQoL.Patches
                 .Select(x => new ColoredString(GetEffectText(x), new Color(255, 119, 119)))
                 );
 
-            if (equip.enItemType == discard.enItemType)
+            if (discard != null && equip.enItemType == discard.enItemType)
                 view.lxEquipStats.AddRange(
                     equip.lenSpecialEffects
                     .Select(x => new ColoredString(GetEffectText(x), Color.LightGreen))
