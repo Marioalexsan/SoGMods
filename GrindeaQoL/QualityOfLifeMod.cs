@@ -15,13 +15,10 @@ using static SoG.SpellVariable;
 
 namespace Marioalexsan.GrindeaQoL
 {
-    [HarmonyPatch]
     public class QualityOfLifeMod : Mod
     {
         public override string Name => "Marioalexsan.GrindeaQoL";
-        public override Version Version => new Version(1, 4);
-
-        private readonly Harmony _patcher = new Harmony(typeof(QualityOfLifeMod).FullName);
+        public override Version Version => new Version(1, 4, 1);
 
         public static QualityOfLifeMod Instance { get; private set; }
 
@@ -35,8 +32,6 @@ namespace Marioalexsan.GrindeaQoL
             BetterLootChance.Init();
             BerserkerStyleQoL.Init();
             SummonPlantQoL.Init();
-
-            _patcher.PatchAll(typeof(QualityOfLifeMod).Assembly);
         }
 
         public override void Unload()
@@ -44,7 +39,6 @@ namespace Marioalexsan.GrindeaQoL
             SummonPlantQoL.CleanupMethod();
             BerserkerStyleQoL.CleanupMethod();
 
-            _patcher.UnpatchAll(_patcher.Id);
             Logger.LogInformation("Bye world!");
 
             Instance = null;
