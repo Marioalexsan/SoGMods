@@ -21,7 +21,7 @@ namespace Marioalexsan.GrindeaQoL
             return Displays.TryGetValue(effect, out string value) ? value : "Special Effect";
         }
 
-        public static Dictionary<SpecialEffect, string> Init() => Displays = new Dictionary<SpecialEffect, string>()
+        public static void Init() => Displays = new Dictionary<SpecialEffect, string>()
         {
             // Max 18-19 characters
             [SpecialEffect._Unique_AncientPendant_IncreasedChargeSpeed] = "Quicker Charging",

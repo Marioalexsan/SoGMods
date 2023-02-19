@@ -18,28 +18,35 @@ namespace Marioalexsan.GrindeaQoL
     public class QualityOfLifeMod : Mod
     {
         public override string Name => "Marioalexsan.GrindeaQoL";
-        public override Version Version => new Version(1, 4, 1);
+        public override Version Version => new Version(1, 5, 0);
 
         public static QualityOfLifeMod Instance { get; private set; }
 
+        private readonly List<(Action, Action)> _initCleanupList;
+
+        public QualityOfLifeMod()
+        {
+            _initCleanupList = new List<(Action, Action)>
+            {
+                (BetterSpecialEffectNames.Init, null),
+                (BetterLootChance.Init, null),
+                (BerserkerStyleQoL.Init, BerserkerStyleQoL.CleanupMethod),
+                (SummonPlantQoL.Init, SummonPlantQoL.CleanupMethod),
+            };
+        }
+
         public override void Load()
         {
-            Logger.LogInformation("My version is {Version}", Version);
             Instance = this;
-            Logger.LogInformation("Hello world!");
 
-            BetterSpecialEffectNames.Init();
-            BetterLootChance.Init();
-            BerserkerStyleQoL.Init();
-            SummonPlantQoL.Init();
+            foreach (var (init, _) in _initCleanupList)
+                init?.Invoke();
         }
 
         public override void Unload()
         {
-            SummonPlantQoL.CleanupMethod();
-            BerserkerStyleQoL.CleanupMethod();
-
-            Logger.LogInformation("Bye world!");
+            foreach (var (_, cleanup) in _initCleanupList)
+                cleanup?.Invoke();
 
             Instance = null;
         }
