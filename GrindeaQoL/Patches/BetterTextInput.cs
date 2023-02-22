@@ -15,7 +15,25 @@ namespace Marioalexsan.GrindeaQoL.Patches
 {
     internal class AttachedTextInputData
     {
-        public int Cursor { get; set; } = 0;
+        public AttachedTextInputData(TextInput input)
+        {
+            Input = input;
+        }
+
+        public TextInput Input { get; }
+
+        public int Cursor
+        {
+            get
+            {
+                return Math.Min(Math.Max(_cursor, 0), Input.sInput.Length);
+            }
+            set
+            {
+                _cursor = value;
+            }
+        }
+        private int _cursor = 0;
     }
 
     [HarmonyPatch]
@@ -27,7 +45,7 @@ namespace Marioalexsan.GrindeaQoL.Patches
         {
             if (!_attachedTextData.ContainsKey(input))
             {
-                _attachedTextData[input] = new AttachedTextInputData();
+                _attachedTextData[input] = new AttachedTextInputData(input);
                 EventInput.EventInput.KeyDown += (s, e) => HandleKeyDown(input, e);
             }
 
@@ -43,10 +61,6 @@ namespace Marioalexsan.GrindeaQoL.Patches
 
             else if (e.KeyCode == Keys.Right)
                 data.Cursor++;
-
-            // Normalize cursor
-            data.Cursor = Math.Max(data.Cursor, 0);
-            data.Cursor = Math.Min(data.Cursor, input.sInput.Length);
         }
 
         [HarmonyPatch(typeof(TextInput), nameof(TextInput.FetchInput))]
@@ -71,6 +85,10 @@ namespace Marioalexsan.GrindeaQoL.Patches
         {
             var data = GetDataAndSetupIfNeeded(__instance);
 
+            // Normalize cursor
+            data.Cursor = Math.Max(data.Cursor, 0);
+            data.Cursor = Math.Min(data.Cursor, __instance.sInput.Length);
+
             if (!__instance.bIsActive || __instance.bInputWaiting)
             {
                 // Just skip the original method entirely
@@ -81,8 +99,8 @@ namespace Marioalexsan.GrindeaQoL.Patches
             {
                 if (__instance.sInput.Length > 0 && data.Cursor > 0)
                 {
-                    __instance.sInput = __instance.sInput.Remove(data.Cursor - 1, 1);
                     data.Cursor--;
+                    __instance.sInput = __instance.sInput.Remove(data.Cursor, 1);
                 }
             }
             else if (e.Character == '\r')
@@ -97,10 +115,6 @@ namespace Marioalexsan.GrindeaQoL.Patches
                     data.Cursor++;
                 }
             }
-
-            // Normalize cursor
-            data.Cursor = Math.Max(data.Cursor, 0);
-            data.Cursor = Math.Min(data.Cursor, __instance.sInput.Length);
 
             // Just skip the original method entirely
             return false;
