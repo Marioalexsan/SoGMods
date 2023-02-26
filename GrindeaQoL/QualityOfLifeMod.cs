@@ -18,7 +18,7 @@ namespace Marioalexsan.GrindeaQoL
     public class QualityOfLifeMod : Mod
     {
         public override string Name => "Marioalexsan.GrindeaQoL";
-        public override Version Version => new Version(1, 7, 0);
+        public override Version Version => new Version(1, 8, 0);
 
         public static QualityOfLifeMod Instance { get; private set; }
 
