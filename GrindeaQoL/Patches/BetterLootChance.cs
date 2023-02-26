@@ -82,20 +82,16 @@ namespace Marioalexsan.GrindeaQoL
 
             double trueChance = boostedChance / baseChance * CfromP(baseChance) * (dropAttempts + 1);
 
-            Console.WriteLine($"Drop chance - {enemy.enType} - {item} - {baseChance * 100:F2}% -  {trueChance * 100:F2}% - {dropAttempts}");
-
             if (Globals.Game.randomInLogic.NextDouble() < trueChance || guaranteeDrop)
             {
                 Globals.Game._EntityMaster_AddItem(item, enemy.xTransform.v2Pos, enemy.xRenderComponent.fVirtualHeight, enemy.xCollisionComponent.xMovementCollider.ibitLayers, new Vector2((float)Globals.Game.randomInLogic.NextDouble() * 2f - 1f, (float)Globals.Game.randomInLogic.NextDouble() * 2f - 1f));
                 _dropTracker[enemy.enType][item] = 0;
-                Console.WriteLine($"Succeeded!");
                 return true;
             }
             else
             {
                 // A fail occurred, so increase counter
                 _dropTracker[enemy.enType][item] = dropAttempts + 1;
-                Console.WriteLine($"Failed.");
                 return false;
             }
         }
